@@ -28,6 +28,12 @@ private:
 	bool _manualInput = false;
 	short _manualKeyValue = -1;
 
+	//If user manually input value and entering decimal part
+	bool _decimalPart = false;
+	//How many decimal numbers supported
+	short _maxDecimalNumbers = 2;
+	short _currentDecimalNumberIndex = 1;
+
 public:
 	SetValueElement() {};
 	SetValueElement(char* name, MenuState* state, double minValue, double maxValue, double currentValue, double stepValue);

@@ -30,6 +30,8 @@ void SetValueElement::react()
 
 	short value = _rotaryEncoder->read();
 
+	bool decimalPartKey = false;
+
 	if(key != KEY_NONE)
 		_buzzer->playOnPress();
 
@@ -60,11 +62,19 @@ void SetValueElement::react()
 		_manualKeyValue = 8;
 	else if (key == KEY_9)
 		_manualKeyValue = 9;
+	else if (key == KEY_RETURN)
+		decimalPartKey = true;
 	else
 		_manualKeyValue = -1;
 
 	if (_manualKeyValue == 0 && _manualInput)
-		_currentValue *= 10;
+		if (!_decimalPart)
+			_currentValue *= 10;
+		else
+			_currentDecimalNumberIndex++;
+
+	else if (_manualInput && decimalPartKey)
+		_decimalPart = true;
 	else if (_manualKeyValue > 0)
 	{
 		if (!_manualInput)
@@ -73,9 +83,22 @@ void SetValueElement::react()
 			_manualInput = true;
 		}
 
-		_currentValue *= 10;
-		_currentValue += _manualKeyValue;
+		if (!_decimalPart)
+		{
+			_currentValue *= 10;
+			_currentValue += _manualKeyValue;
+		}
+		else
+		{
+			_currentValue += pow(10, _currentDecimalNumberIndex * -1) * _manualKeyValue;
+			_currentDecimalNumberIndex++;
+		}
+		
 	}
+
+	//If during decimal input we hit max decimal numbers count accept value and go back to menu
+	if(_currentDecimalNumberIndex > _maxDecimalNumbers)
+		_state->back();
 		
 }
 
