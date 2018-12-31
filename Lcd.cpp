@@ -67,8 +67,9 @@ void Lcd::manage(MenuState* menuState)
 {
 	//Line 1
 	char* prevName = (char*)menuState->getPrev();
+	bool itemFocused = menuState->isItemFocused();
 
-	if (prevName != "")
+	if (prevName != "" && !itemFocused)
 	{
 		writeNewLine(0, "  ");
 		writeLine(0, prevName);
@@ -78,6 +79,9 @@ void Lcd::manage(MenuState* menuState)
 		if (prevNameValue != "")
 			writeLine(0, prevNameValue);
 	}
+	else
+		writeNewLine(0, "  ");
+
 	changeLeftOrientation(true);
 
 	//Line 2
@@ -97,7 +101,7 @@ void Lcd::manage(MenuState* menuState)
 
 	//Line 3
 	char* nextName = (char*)menuState->getNext();
-	if (nextName != "")
+	if (nextName != "" && !itemFocused)
 	{
 		writeNewLine(2, "  ");
 		writeLine(2, nextName);
@@ -107,6 +111,9 @@ void Lcd::manage(MenuState* menuState)
 		if (nextNameValue != "")
 			writeLine(2, nextNameValue);
 	}
+	else
+		writeNewLine(2, "  ");
+
 	changeLeftOrientation(true);
 
 	//Line 4
