@@ -67,6 +67,9 @@ void SetValueElement::react()
 	else
 		_manualKeyValue = -1;
 
+	if (_manualKeyValue != -1)
+		_state->needRedraw();
+
 	if (_manualKeyValue == 0 && _manualInput)
 		if (!_decimalPart)
 			_currentValue *= 10;
